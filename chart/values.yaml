@@ -1,0 +1,30 @@
+infisicalSecrets:
+  - name: infisical-postgres-secret
+    serviceTokenSecretName: service-token
+    secretsPath: /postgresql
+    secretName: postgres-secret
+  - name: infisical-redis-secret
+    serviceTokenSecretName: service-token
+    secretsPath: /redis
+    secretName: redis-secret
+  - name: infisical-certificates
+    serviceTokenSecretName: service-token
+    secretsPath: /certificates
+    secretName: tls-secret
+    secretType: kubernetes.io/tls
+  - name: infisical-auth-secret
+    serviceTokenSecretName: service-token
+    secretsPath: /authentik
+    secretName: auth-secret
+
+ingress:
+  name: ingress
+  hosts:
+    - host: auth.mariusne.com
+      paths:
+        - path: "/"
+          pathType: Prefix
+          serviceName: authentik
+          servicePort: http
+  tls:
+    secretName: tls-secret

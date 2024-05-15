@@ -1,0 +1,59 @@
+authentik:
+  secret_key: file:///auth-creds/SECRET_KEY
+  postgresql:
+    host: service.postgres.svc.cluster.local
+    user: file:///postgres-creds/AUTHENTIK_USER
+    password: file:///postgres-creds/AUTHENTIK_PASSWORD
+  redis:
+    host: service.redis.svc.cluster.local
+    password: file:///redis-creds/REDIS_PASSWORD
+  # secret_key: $SECRET_KEY
+  # postgresql:
+  #   host: service.postgres.svc.cluster.local
+  #   user: $AUTHENTIK_USER
+  #   password: $AUTHENTIK_PASSWORD
+  # redis:
+  #   host: service.redis.svc.cluster.local
+  #   password: $REDIS_PASSWORD
+server:
+  # env:
+  #   - name: SECRET_KEY
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: auth-secret
+  #         key: SECRET_KEY
+  #   - name: AUTHENTIK_USER
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: postgres-secret
+  #         key: AUTHENTIK_USER
+  #   - name: AUTHENTIK_PASSWORD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: postgres-secret
+  #         key: AUTHENTIK_PASSWORD
+  #   - name: REDIS_PASSWORD
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: redis-secret
+  #         key: REDIS_PASSWORD
+  volumes:
+    - name: postgres-creds
+      secret:
+        secretName: postgres-secret
+    - name: redis-creds
+      secret:
+        secretName: redis-secret
+    - name: auth-creds
+      secret:
+        secretName: auth-secret
+  volumeMounts:
+    - name: postgres-creds
+      mountPath: /postgres-creds
+      readOnly: true
+    - name: redis-creds
+      mountPath: /redis-creds
+      readOnly: true
+    - name: auth-creds
+      mountPath: /auth-creds
+      readOnly: true
